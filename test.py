@@ -83,32 +83,14 @@ class TestRover(unittest.TestCase):
         self.assertEqual(self.rover._Rover__position._Position__x._Coordinate__value, 0)
         self.assertEqual(self.rover._Rover__position._Position__y._Coordinate__value, 5)
         self.assertEqual(self.rover._Rover__orientation._Orientation__orientation, 'W')
-    
-    def test_server_functionality(self):
-        
-
-        # Simulate client interactions with the server (e.g., use sockets)
-
-        # Perform server-specific test assertions
-
-        # Terminate the server process
-    
-    def test_client_functionality(self):
-        # Run the client script as a separate process
-        client_process = subprocess.Popen(['python', 'client.py'])
-
-        # Simulate client interactions with the server (e.g., use sockets)
-
-        # Perform client-specific test assertions
-
-        # Terminate the client process
-        client_process.terminate()
-        
+            
     def test_server_client_communication(self):
         pass
         server_process = subprocess.Popen(['python', 'server.py'])
         time.sleep(1)
+        client_process = subprocess.Popen(['python', 'client.py'])
         server_process.terminate()
+        client_process.terminate()
 
 
 
