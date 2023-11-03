@@ -14,6 +14,7 @@ from Communication.ProtocolCommunication import MyCommunicationProtocol
 
 class MyCommandSender(CommandSender):
     def send_command(self, instructions):
+        #protocol.client_socket.send("serialized_instructions".encode('utf-8'))
         serialized_instructions = pickle.dumps(instructions)
         protocol.client_socket.send(serialized_instructions)
 
