@@ -2,8 +2,8 @@ import socket
 import pickle
 from Communication.CommunicationAbstraction import CommandSender, CommandReceiver
 
-class MyCommunicationProtocol:
-    def __init__(self, sender: CommandSender, receiver: CommandReceiver):
+class MyCommunicationProtocol(CommandSender, CommandReceiver) :
+    def __init__(self, sender, receiver):
         self.sender = sender
         self.receiver = receiver
         self.client_socket = None
@@ -19,6 +19,14 @@ class MyCommunicationProtocol:
     def establish_connection(self, server_address):
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_socket.connect(server_address)
+
+    def send_command(self, socket, command):
+        # Implémentez la logique d'envoi de la commande ici
+        pass
+
+    def receive_command(self, socket):
+        # Implémentez la logique de réception de la commande ici
+        pass
 
     def send_and_receive(self, command):
         self.sender.send_command(self.client_socket, command)

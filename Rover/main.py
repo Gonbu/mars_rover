@@ -12,15 +12,31 @@ from Communication.CommunicationAbstraction import CommandSender, CommandReceive
 from Communication.ProtocolCommunication import MyCommunicationProtocol
 
 class MyCommandSender(CommandSender):
-    def send_command(self, command):
-        serialized_obj = pickle.dumps(command)
-        protocol.client_socket.send(serialized_obj)
+    def send_command(self, curiosity):
+        data_to_send = (curiosity)
+        serialized_data = pickle.dumps(data_to_send)
+        # Vous pouvez également envoyer la longueur des données en tant que préfixe
+        data_length = len(serialized_data).to_bytes(4, byteorder='big')  # 4 bytes for data length
+        data_to_send = data_length + serialized_data
+
+        # Maintenant, vous envoyez les données avec la longueur en tant que préfixe
+        protocol.client_socket.sendall(data_to_send)
 
 class MyCommandReceiver(CommandReceiver):
     def receive_command(self):
-        data = protocol.client_socket.recv(1024)
-        command_obj = pickle.loads(data)
-        return command_obj
+        # Attendez de recevoir la longueur des données (4 octets)
+        data_length_bytes = protocol.client_socket.recv(4)
+        data_length = int.from_bytes(data_length_bytes, byteorder='big')
+        # Maintenant, attendez de recevoir les données réelles en utilisant la longueur
+        data = b""
+        while len(data) < data_length:
+            chunk = protocol.client_socket.recv(data_length - len(data))
+            if not chunk:
+                raise Exception("Connexion interrompue avant la fin de la réception des données.")
+            data += chunk
+        (instructions, mars, curiosity) = pickle.loads(data)
+        return instructions, mars, curiosity
+
 
 server_address = ('127.0.0.1', 12345)
 
@@ -30,21 +46,19 @@ protocol = MyCommunicationProtocol(sender, receiver)
 
 # Initialiser le serveur dans le protocole
 protocol.initialize_server(server_address)
-mars = planet.Planet(5, 5, None)
-curiosity = rover.Rover(0, 0, 'N')
+""" mars = planet.Planet(5, 5, None)
+curiosity = rover.Rover(0, 0, 'N') """
 
 # Attendez les données du client et renvoyez-les
 while True:
-    instructions = receiver.receive_command()
+    instructions, mars, curiosity = receiver.receive_command()
     if not instructions:
         break  # Fin de la communication
-    print("MissionControl dit : {}".format(instructions))
     print(instructions._Instruction__instruction_order)
     
     curiosity = instructions.exec_commands(mars, curiosity)
-    print(curiosity)
-    #response = Instruction("LLFF")
-    #sender.send_command(response)
+
+    sender.send_command(curiosity)
 
 # Fermez les sockets
 protocol.close_connection()
