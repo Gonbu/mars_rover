@@ -39,7 +39,7 @@ class MyCommandReceiver(CommandReceiver):
         return curiosity
 
 # Définit l'adresse IP et le port du serveur auquel se connecter
-server_address = ('127.0.0.1', 12345)
+server_address = ('127.0.0.1', 12346)
 
 sender = MyCommandSender()
 receiver = MyCommandReceiver()
