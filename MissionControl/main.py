@@ -35,8 +35,8 @@ class MyCommandReceiver(CommandReceiver):
             if not chunk:
                 raise Exception("Connexion interrompue avant la fin de la réception des données.")
             data += chunk
-        (curiosity) = pickle.loads(data)
-        return curiosity
+        (curiosity, coords) = pickle.loads(data)
+        return curiosity, coords
 
 # Définit l'adresse IP et le port du serveur auquel se connecter
 server_address = ('127.0.0.1', 12346)
@@ -55,10 +55,12 @@ while True:
     instructions.add_instruction()
     sender.send_command(instructions, mars, curiosity)
     # Recevez l'état mis à jour de Rover
-    curiosity = receiver.receive_command()
+    curiosity, obstacle = receiver.receive_command()
 
     # Traitez les données reçues de Rover
     print("Rover renvoie : {}".format(curiosity))
+    if (obstacle["is_obstacle"]) :
+        print("obstacle : {}".format(obstacle["position"]))
 
 # Ferme le socket client
 client_socket.close()

@@ -26,20 +26,21 @@ class Instruction:
         pass
 
     def exec_commands(self, planet, rover):
+        obstacle = {"is_obstacle": False}
         if self.__is_valid == False:
-            return rover
+            return rover, obstacle
         for command in self.__instruction_order:
             if command == 'F':
-                rover, is_obstacle = rover.move_forward(planet)
-                if is_obstacle :
+                rover, obstacle = rover.move_forward(planet)
+                if obstacle["is_obstacle"] :
                     break
             elif command == 'B':
-                rover, is_obstacle = rover.move_backward(planet)
-                if is_obstacle :
+                rover, obstacle = rover.move_backward(planet)
+                if obstacle["is_obstacle"] :
                     break
             elif command == 'L':
                 rover = rover.turn_left()
             elif command == 'R':
                 rover = rover.turn_right()
 
-        return rover
+        return rover, obstacle

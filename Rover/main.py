@@ -12,8 +12,8 @@ from Communication.CommunicationAbstraction import CommandSender, CommandReceive
 from Communication.ProtocolCommunication import MyCommunicationProtocol
 
 class MyCommandSender(CommandSender):
-    def send_command(self, curiosity):
-        data_to_send = (curiosity)
+    def send_command(self, curiosity, coords):
+        data_to_send = (curiosity, coords)
         serialized_data = pickle.dumps(data_to_send)
         # Vous pouvez également envoyer la longueur des données en tant que préfixe
         data_length = len(serialized_data).to_bytes(4, byteorder='big')  # 4 bytes for data length
@@ -56,9 +56,9 @@ while True:
         break  # Fin de la communication
     print(instructions._Instruction__instruction_order)
     
-    curiosity = instructions.exec_commands(mars, curiosity)
+    curiosity, obstacle = instructions.exec_commands(mars, curiosity)
 
-    sender.send_command(curiosity)
+    sender.send_command(curiosity, obstacle)
 
 # Fermez les sockets
 protocol.close_connection()

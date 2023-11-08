@@ -19,6 +19,7 @@ class Orientation:
         }
 
     def update_position(self, direction, position, planet):
+        obstacle = {"is_obstacle": False, "position": ()}
         if direction == 'F':
             dx, dy = self.__movements[self.__orientation]
         elif direction == 'B':
@@ -26,15 +27,16 @@ class Orientation:
         else:
             raise ValueError("Invalid direction")
         
-        is_obstacle = planet.is_obstacle_at_position(Position(dx+position._Position__x._Coordinate__value, dy+position._Position__y._Coordinate__value))
-        
-        if not is_obstacle :
+        obstacle["is_obstacle"] = planet.is_obstacle_at_position(Position(dx+position._Position__x._Coordinate__value, dy+position._Position__y._Coordinate__value))
+
+        if not obstacle["is_obstacle"] :
             position._Position__x._Coordinate__value += dx
             position._Position__y._Coordinate__value += dy
             position = planet.check_limit_planet(position)
         else :
+            obstacle["position"] = {"x": dx+position._Position__x._Coordinate__value, "y": dy+position._Position__y._Coordinate__value}
             print("Obstacle rencontré")
-        return Position(position._Position__x._Coordinate__value, position._Position__y._Coordinate__value), is_obstacle
+        return Position(position._Position__x._Coordinate__value, position._Position__y._Coordinate__value), obstacle
 
     def update_orientation(self, rotation):
         rotations = self.__rotations

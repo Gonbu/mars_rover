@@ -8,16 +8,16 @@ class Rover:
         self.__orientation = Orientation(orientation)
 
     def move_forward(self, planet):
-        position, is_obstacle = self.__orientation.update_position('F', self.__position, planet)
+        position, obstacle = self.__orientation.update_position('F', self.__position, planet)
         new_rover = Rover(position._Position__x._Coordinate__value, position._Position__y._Coordinate__value, self.__orientation._Orientation__orientation)
         new_rover.to_string()
-        return new_rover, is_obstacle
+        return new_rover, obstacle
         
     def move_backward(self, planet):
-        position, is_obstacle = self.__orientation.update_position('B', self.__position, planet)
+        position, obstacle = self.__orientation.update_position('B', self.__position, planet)
         new_rover = Rover(position._Position__x._Coordinate__value, position._Position__y._Coordinate__value, self.__orientation._Orientation__orientation)
         new_rover.to_string()
-        return new_rover, is_obstacle
+        return new_rover, obstacle
 
     def turn_left(self):
         orientation = self.__orientation.update_orientation('L')
