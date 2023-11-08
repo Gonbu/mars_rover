@@ -48,6 +48,7 @@ protocol_client.establish_connection(rover_address)
 # Le Repeater agit en tant que relais entre MissionControl et Rover
 while True:
     data = receiver.receive_command(protocol_server)
+    print(data)
     if not data:
         break  # Fin de la communication
 

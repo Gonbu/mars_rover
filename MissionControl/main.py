@@ -39,7 +39,15 @@ class MyCommandReceiver(CommandReceiver):
         return curiosity, coords
 
 # Définit l'adresse IP et le port du serveur auquel se connecter
-server_address = ('127.0.0.1', 12346)
+valid_server_address_input = False
+while not valid_server_address_input :
+    server_address_input = input('Voulez vous utiliser le repeteur ? (O/N) : ').replace(" ", "")
+    if server_address_input == "O":
+        server_address = ('127.0.0.1', 12346)
+        valid_server_address_input = True
+    if server_address_input == "N":
+        server_address = ('127.0.0.1', 12345)
+        valid_server_address_input = True
 
 sender = MyCommandSender()
 receiver = MyCommandReceiver()
