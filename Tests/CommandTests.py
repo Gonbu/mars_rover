@@ -34,9 +34,6 @@ class CommandTests(unittest.TestCase):
         self.server.protocol.initialize_server(self.server.server_address)
         unittest.TestCase.assertEqual(self, self.server.protocol.client_socket, None)
 
-
-
-
     def testSendAndReceive(self):
         pass
 
