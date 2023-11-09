@@ -1,3 +1,4 @@
+import pickle
 import subprocess
 import time
 import unittest
@@ -6,6 +7,9 @@ from Domain.Exploration.planet import Planet
 from Domain.MissionRover.instruction import Instruction
 from Domain.Topologie.position import Position
 from Domain.Exploration.obstacle import Obstacle
+from Communication.ProtocolCommunication import MyCommunicationProtocol
+from MissionControl.main import MyCommandSender
+
 
 
 class TestRover(unittest.TestCase):
@@ -84,13 +88,15 @@ class TestRover(unittest.TestCase):
         self.assertEqual(self.rover._Rover__position._Position__y._Coordinate__value, 5)
         self.assertEqual(self.rover._Rover__orientation._Orientation__orientation, 'W')
             
-    def test_server_client_communication(self):
-        pass
-        server_process = subprocess.Popen(['python', 'server.py'])
+    def testServerClientCommunication(self):
+        server = 'Rover/main.py'
+        client = 'MissionControl/main.py'
+        server_process = subprocess.Popen(['python', server])
         time.sleep(1)
-        client_process = subprocess.Popen(['python', 'client.py'])
+        client_process = subprocess.Popen(['python', client])
         server_process.terminate()
         client_process.terminate()
+        
 
 
 
