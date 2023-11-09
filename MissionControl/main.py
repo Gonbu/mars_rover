@@ -5,70 +5,77 @@ import sys
 import os
 current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.abspath(os.path.join(current_dir, '..'))
-sys.path.append(root_dir)   
-from Domain.MissionRover import rover
-from Domain.Exploration import planet
-from Domain.MissionRover import instruction
+sys.path.append(root_dir)
+
+from Domain.MissionRover.rover import Rover
+from Domain.Exploration.planet import Planet
+from Domain.MissionRover.instruction import Instruction
 from Communication.CommunicationAbstraction import CommandSender, CommandReceiver
 from Communication.ProtocolCommunication import MyCommunicationProtocol
+from Domain.MissionRover.missionInitializer import *
 
 class MyCommandSender(CommandSender):
-    def send_command(self, instructions, mars, curiosity):
-        data_to_send = (instructions, mars, curiosity)
-        serialized_data = pickle.dumps(data_to_send)
-        # Vous pouvez également envoyer la longueur des données en tant que préfixe
-        data_length = len(serialized_data).to_bytes(4, byteorder='big')  # 4 bytes for data length
-        data_to_send = data_length + serialized_data
-
-        # Maintenant, vous envoyez les données avec la longueur en tant que préfixe
+    def send_command(self, instructions):
+        data_to_send = protocol.encode(instructions)
         protocol.client_socket.sendall(data_to_send)
 
 class MyCommandReceiver(CommandReceiver):
     def receive_command(self):
-        # Attendez de recevoir la longueur des données (4 octets)
+        # Réception de la longueur des données en tant que préfixe
         data_length_bytes = protocol.client_socket.recv(4)
         data_length = int.from_bytes(data_length_bytes, byteorder='big')
-        # Maintenant, attendez de recevoir les données réelles en utilisant la longueur
+
+        # Réception des données
         data = b""
         while len(data) < data_length:
             chunk = protocol.client_socket.recv(data_length - len(data))
             if not chunk:
                 raise Exception("Connexion interrompue avant la fin de la réception des données.")
             data += chunk
-        (curiosity, coords) = pickle.loads(data)
-        return curiosity, coords
 
-# Définit l'adresse IP et le port du serveur auquel se connecter
+        # Décodage des données
+        decoded_data = data.decode('utf-8')
+        rover_str, coords = decoded_data.split(',')[0:3], list(map(int, decoded_data.split(',')[3:]))
+        rover.from_repr(rover_str)
+        return rover, coords
+
+# Définition de l'adresse IP et du port du serveur auquel se connecter
 valid_server_address_input = False
-while not valid_server_address_input :
-    server_address_input = input('Voulez vous utiliser le repeteur ? (O/N) : ').replace(" ", "")
+while not valid_server_address_input:
+    server_address_input = input('Voulez-vous utiliser le répéteur ? (O/N) : ').replace(" ", "")
     if server_address_input == "O":
         server_address = ('127.0.0.1', 12346)
         valid_server_address_input = True
-    if server_address_input == "N":
+    elif server_address_input == "N":
         server_address = ('127.0.0.1', 12345)
         valid_server_address_input = True
 
+# Initialisation des objets de communication
 sender = MyCommandSender()
 receiver = MyCommandReceiver()
 protocol = MyCommunicationProtocol(sender, receiver)
 
+# Établissement de la connexion avec le serveur
 protocol.establish_connection(server_address)
 
-mars = planet.Planet(5, 5, None)
-curiosity = rover.Rover(0, 0, 'N')
+# Initialisation du rover
+rover = Rover(position_x_start, position_y_start, orientation_start)
 
 while True:
-    instructions = instruction.Instruction()
+    # Collecte des instructions
+    instructions = Instruction()
     instructions.add_instruction()
-    sender.send_command(instructions, mars, curiosity)
-    # Recevez l'état mis à jour de Rover
-    curiosity, obstacle = receiver.receive_command()
 
-    # Traitez les données reçues de Rover
-    print("Rover renvoie : {}".format(curiosity))
-    if (obstacle["is_obstacle"]) :
-        print("obstacle : {}".format(obstacle["position"]))
+    # Envoi des commandes au rover
+    sender.send_command(instructions._Instruction__instruction_order)
 
-# Ferme le socket client
-client_socket.close()
+    # Réception de l'état mis à jour du rover
+    rover, obstacle = receiver.receive_command()
+
+    # Traitement des données reçues du rover
+    rover.to_string()
+    if len(obstacle) > 0:
+        print("Obstacle : {}".format(obstacle))
+
+# Fermeture du socket client (Note : il manquait l'initialisation du socket client dans votre code)
+protocol.client_socket.close()

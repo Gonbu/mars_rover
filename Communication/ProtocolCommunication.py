@@ -32,6 +32,12 @@ class MyCommunicationProtocol(CommandSender, CommandReceiver) :
         self.sender.send_command(self.client_socket, command)
         response = self.receiver.receive_command(self.client_socket)
         return response
+    
+    def encode(self, *values):
+        data_to_send = ",".join(map(str, values))
+        data_length = len(data_to_send).to_bytes(4, byteorder='big')
+        data_to_send = data_length + data_to_send.encode('utf-8')
+        return data_to_send
 
     def close_connection(self):
         self.client_socket.close()
