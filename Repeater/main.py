@@ -10,7 +10,7 @@ sys.path.append(root_dir)
 
 from Domain.MissionRover.rover import Rover
 from Domain.MissionRover.instruction import Instruction
-from Communication.CommunicationAbstraction import CommandSender, CommandReceiver
+from Domain.Communication.CommunicationAbstraction import CommandSender, CommandReceiver
 from Communication.ProtocolCommunication import MyCommunicationProtocol
 
 class MyCommandSenderMissionControl(CommandSender):

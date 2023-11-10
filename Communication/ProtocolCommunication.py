@@ -1,6 +1,6 @@
 import socket
 import pickle
-from Communication.CommunicationAbstraction import CommandSender, CommandReceiver
+from Domain.Communication.CommunicationAbstraction import CommandSender, CommandReceiver
 
 class MyCommunicationProtocol(CommandSender, CommandReceiver) :
     def __init__(self, sender, receiver):
