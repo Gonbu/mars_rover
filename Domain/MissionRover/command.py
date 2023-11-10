@@ -1,7 +1,7 @@
 # Entité
-class Instruction:
-    def __init__(self, instructions = [], is_valid = False):
-        self.__instruction_order = instructions
+class Command:
+    def __init__(self, commands = [], is_valid = False):
+        self.__command_order = commands
         self.__forward = 'F'
         self.__backward = 'B'
         self.__left = 'L'
@@ -9,8 +9,8 @@ class Instruction:
         self.again = True
         self.__is_valid = is_valid
 
-    def add_instruction(self):
-        self.__instruction_order = []
+    def add_command(self):
+        self.__command_order = []
         commands_string = input('Enter commands: ').replace(" ", "")
         if "Q" in commands_string :
             self.again = False
@@ -20,7 +20,7 @@ class Instruction:
         
         if self.__is_valid :
             for command in commands :
-                self.__instruction_order.append(command)
+                self.__command_order.append(command)
         else:
             print('Invalid command list')
         pass
@@ -29,7 +29,7 @@ class Instruction:
         obstacle = {"is_obstacle": False}
         if self.__is_valid == False:
             return rover, obstacle
-        for command in self.__instruction_order:
+        for command in self.__command_order:
             if command == 'F':
                 rover, obstacle = rover.move_forward(planet)
                 if obstacle["is_obstacle"] :
