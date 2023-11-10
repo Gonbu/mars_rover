@@ -34,7 +34,9 @@ class Orientation:
             position._Position__y._Coordinate__value += dy
             position = planet.check_limit_planet(position)
         else :
-            obstacle["position"] = {"x": dx+position._Position__x._Coordinate__value, "y": dy+position._Position__y._Coordinate__value}
+            obstacle_position = Position(dx+position._Position__x._Coordinate__value, dy+position._Position__y._Coordinate__value)
+            obstacle_position = planet.check_limit_planet(obstacle_position)
+            obstacle["position"] = {"x": obstacle_position._Position__x._Coordinate__value, "y": obstacle_position._Position__y._Coordinate__value}
             print("Obstacle rencontré")
         return Position(position._Position__x._Coordinate__value, position._Position__y._Coordinate__value), obstacle
 
