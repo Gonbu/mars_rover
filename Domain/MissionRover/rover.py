@@ -11,16 +11,22 @@ class Rover:
         return f"{self.__position._Position__x._Coordinate__value},{self.__position._Position__y._Coordinate__value},{self.__orientation._Orientation__orientation}"
 
     def move_forward(self, planet):
-        position, obstacle = self.__orientation.update_position('F', self.__position, planet)
+        initial_position = Position(self.__position._Position__x._Coordinate__value, self.__position._Position__y._Coordinate__value)
+        position = self.__orientation.update_position('F', initial_position, planet)
+        if position._Position__x._Coordinate__value == self.__position._Position__x._Coordinate__value and position._Position__y._Coordinate__value == self.__position._Position__y._Coordinate__value :
+            return self
         new_rover = Rover(position._Position__x._Coordinate__value, position._Position__y._Coordinate__value, self.__orientation._Orientation__orientation)
         new_rover.to_string()
-        return new_rover, obstacle
+        return new_rover
         
     def move_backward(self, planet):
-        position, obstacle = self.__orientation.update_position('B', self.__position, planet)
+        initial_position = Position(self.__position._Position__x._Coordinate__value, self.__position._Position__y._Coordinate__value)
+        position = self.__orientation.update_position('B', initial_position, planet)
+        if position._Position__x._Coordinate__value == self.__position._Position__x._Coordinate__value and position._Position__y._Coordinate__value == self.__position._Position__y._Coordinate__value :
+            return self
         new_rover = Rover(position._Position__x._Coordinate__value, position._Position__y._Coordinate__value, self.__orientation._Orientation__orientation)
         new_rover.to_string()
-        return new_rover, obstacle
+        return new_rover
 
     def turn_left(self):
         orientation = self.__orientation.update_orientation('L')
