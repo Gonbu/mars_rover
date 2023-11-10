@@ -32,9 +32,14 @@ def main() :
     receiver = CommandReceiverRover()
     protocol = MyCommunicationProtocol(sender, receiver)
 
+<<<<<<< HEAD
     # Établissement de la connexion avec le serveur
     server_address = initialize_server_address()
     protocol.establish_connection(server_address)
+=======
+# Définit l'adresse IP et le port du serveur auquel se connecter
+server_address = ('127.0.0.1', 12346)
+>>>>>>> 494897a (planet and rover comes from MissionControl With Repeater)
 
     # Initialisation du rover
     rover = Rover(position_x_start, position_y_start, orientation_start)
