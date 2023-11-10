@@ -92,12 +92,35 @@ class TestRover(unittest.TestCase):
         client = 'MissionControl/main.py'
         server_process = subprocess.Popen(['python', server])
         time.sleep(1)
-        client_process = subprocess.Popen(['python', client])
-        client_process.wait()
-        print("All was successful")
-        server_process.terminate()
-        client_process.terminate()
+        # client_process = subprocess.Popen(['python', client], stdin=subprocess.PIPE, text=True)
+        # time.sleep(1)
+        with subprocess.Popen(['python', client], stdin=subprocess.PIPE,  stdout=subprocess.PIPE, text=True) as client_process:
+            # Write to the client's stdin
+            client_process.stdin.write("N\n")
+            client_process.stdin.flush()
+            client_process.stdin.write("FFF\n")
+            client_process.stdin.flush()
+            client_process.stdin.write("FRBF\n")
+            client_process.stdin.flush()
 
+            # Read the output of the client process
+            # client_output, _ = client_process.communicate()
+
+            # # Print the output
+            # print("Client output:", client_output)
+
+
+            # Wait for the client process to finish
+            client_process.wait()
+            # Wait for the server process to finish
+            server_process.wait()
+
+        
+        print("All was successful")
+        client_process.terminate()
+        server_process.terminate()
+
+    
         
 
 
