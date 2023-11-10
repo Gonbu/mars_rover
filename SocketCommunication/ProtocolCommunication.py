@@ -38,6 +38,21 @@ class MyCommunicationProtocol(CommandSender, CommandReceiver) :
         data_length = len(data_to_send).to_bytes(4, byteorder='big')
         data_to_send = data_length + data_to_send.encode('utf-8')
         return data_to_send
+    
+    def receive_data_with_length(self, protocol) :
+        # Réception de la longueur des données en tant que préfixe
+        data_length_bytes = protocol.client_socket.recv(4)
+        data_length = int.from_bytes(data_length_bytes, byteorder='big')
+
+        # Réception des données
+        data = b""
+        while len(data) < data_length:
+            chunk = protocol.client_socket.recv(data_length - len(data))
+            if not chunk:
+                raise Exception("Connexion interrompue avant la fin de la réception des données.")
+            data += chunk
+
+        return data
 
     def close_connection(self):
         self.client_socket.close()
