@@ -11,33 +11,10 @@ from Domain.MissionRover.rover import Rover
 from Domain.Exploration.planet import Planet
 from Domain.MissionRover.instruction import Instruction
 from Domain.Communication.CommunicationAbstraction import CommandSender, CommandReceiver
-from Communication.ProtocolCommunication import MyCommunicationProtocol
+from SocketCommunication.ProtocolCommunication import MyCommunicationProtocol
+from SocketCommunication.CommandReceiverRover import CommandReceiverRover
+from SocketCommunication.CommandSenderRover import CommandSenderRover
 from Missions.marsMission import *
-
-class MyCommandSender(CommandSender):
-    def send_command(self, protocol, instructions):
-        data_to_send = protocol.encode(instructions)
-        protocol.client_socket.sendall(data_to_send)
-
-class MyCommandReceiver(CommandReceiver):
-    def receive_command(self, protocol, rover):
-        # Réception de la longueur des données en tant que préfixe
-        data_length_bytes = protocol.client_socket.recv(4)
-        data_length = int.from_bytes(data_length_bytes, byteorder='big')
-
-        # Réception des données
-        data = b""
-        while len(data) < data_length:
-            chunk = protocol.client_socket.recv(data_length - len(data))
-            if not chunk:
-                raise Exception("Connexion interrompue avant la fin de la réception des données.")
-            data += chunk
-
-        # Décodage des données
-        decoded_data = data.decode('utf-8')
-        rover_str, coords = decoded_data.split(',')[0:3], list(map(int, decoded_data.split(',')[3:]))
-        rover.from_repr(rover_str)
-        return rover, coords
 
 def initialize_server_address():
     # Définition de l'adresse IP et du port du serveur auquel se connecter
@@ -51,8 +28,8 @@ def initialize_server_address():
 
 def main() :
     # Initialisation des objets de communication
-    sender = MyCommandSender()
-    receiver = MyCommandReceiver()
+    sender = CommandSenderRover()
+    receiver = CommandReceiverRover()
     protocol = MyCommunicationProtocol(sender, receiver)
 
     # Établissement de la connexion avec le serveur
