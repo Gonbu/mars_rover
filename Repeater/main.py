@@ -85,11 +85,12 @@ def main() :
     try :
         # Le Repeater agit en tant que relais entre MissionControl et Rover
         while True:
+            # Collecte des instructions
             instructions = receiver_mission_control.receive_command(protocol_server)
             if not instructions:
                 break  # Fin de la communication
 
-            # Réexpédier les données à Rover
+            # Réexpédier les instructions à Rover
             sender_rover.send_command(protocol_client, instructions._Instruction__instruction_order)
 
             # Recevoir les données de Rover
