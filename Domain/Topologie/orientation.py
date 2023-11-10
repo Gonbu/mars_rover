@@ -19,26 +19,29 @@ class Orientation:
         }
 
     def update_position(self, direction, position, planet):
-        obstacle = {"is_obstacle": False, "position": ()}
+        direction_x, direction_y = self.get_direction_x_y(direction)
+    
+        if not planet.is_obstacle_at_position(Position(direction_x+position._Position__x._Coordinate__value, direction_y+position._Position__y._Coordinate__value)) :
+            position = self.position_after_movement(planet, position, direction_x, direction_y)
+        else :
+            print("Obstacle rencontré")
+        return Position(position._Position__x._Coordinate__value, position._Position__y._Coordinate__value)
+
+    def get_direction_x_y(self, direction) :
         if direction == 'F':
-            dx, dy = self.__movements[self.__orientation]
+            direction_x, direction_y = self.__movements[self.__orientation]
+            return direction_x, direction_y
         elif direction == 'B':
-            dx, dy = self.__movements[self.__opposites[self.__orientation]]
+            direction_x, direction_y = self.__movements[self.__opposites[self.__orientation]]
+            return direction_x, direction_y
         else:
             raise ValueError("Invalid direction")
-        
-        obstacle["is_obstacle"] = planet.is_obstacle_at_position(Position(dx+position._Position__x._Coordinate__value, dy+position._Position__y._Coordinate__value))
 
-        if not obstacle["is_obstacle"] :
-            position._Position__x._Coordinate__value += dx
-            position._Position__y._Coordinate__value += dy
-            position = planet.check_limit_planet(position)
-        else :
-            obstacle_position = Position(dx+position._Position__x._Coordinate__value, dy+position._Position__y._Coordinate__value)
-            obstacle_position = planet.check_limit_planet(obstacle_position)
-            obstacle["position"] = {"x": obstacle_position._Position__x._Coordinate__value, "y": obstacle_position._Position__y._Coordinate__value}
-            print("Obstacle rencontré")
-        return Position(position._Position__x._Coordinate__value, position._Position__y._Coordinate__value), obstacle
+    def position_after_movement(self, planet, position, direction_x, direction_y) :
+        position._Position__x._Coordinate__value += direction_x
+        position._Position__y._Coordinate__value += direction_y
+        position = planet.check_limit_planet(position)
+        return position
 
     def update_orientation(self, rotation):
         rotations = self.__rotations
