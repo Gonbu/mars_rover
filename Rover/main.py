@@ -33,11 +33,8 @@ def main():
                 break  # Fin de la communication
 
             rover, obstacle = commands.exec_commands(mars, rover)
-
-            if obstacle["is_obstacle"]:
-                sender.send_command(protocol, rover, [obstacle["position"]["x"], obstacle["position"]["y"]])
-            else:
-                sender.send_command(protocol, rover, [])
+            
+            sender.send_command(protocol, rover, obstacle)
     finally:
         # Fermez les sockets
         protocol.close_connection()

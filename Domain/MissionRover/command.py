@@ -26,21 +26,25 @@ class Command:
         pass
 
     def exec_commands(self, planet, rover):
-        obstacle = {"is_obstacle": False}
         if self.__is_valid == False:
-            return rover, obstacle
+            return rover, None
         for command in self.__command_order:
+            actual_rover = rover
             if command == 'F':
-                rover, obstacle = rover.move_forward(planet)
-                if obstacle["is_obstacle"] :
-                    break
+                rover = rover.move_forward(planet)
+                if actual_rover == rover :
+                    direction_x, direction_y = rover._Rover__orientation.get_direction_x_y('F')
+                    obstacle_position = rover._Rover__orientation.position_after_movement(planet, rover._Rover__position, direction_x, direction_y)
+                    return rover, [obstacle_position._Position__x._Coordinate__value, obstacle_position._Position__y._Coordinate__value]
             elif command == 'B':
-                rover, obstacle = rover.move_backward(planet)
-                if obstacle["is_obstacle"] :
-                    break
+                rover = rover.move_backward(planet)
+                if actual_rover == rover :
+                    direction_x, direction_y = rover._Rover__orientation.get_direction_x_y('B')
+                    obstacle_position = rover._Rover__orientation.position_after_movement(planet, rover._Rover__position, direction_x, direction_y)
+                    return rover, [obstacle_position._Position__x._Coordinate__value, obstacle_position._Position__y._Coordinate__value]
             elif command == 'L':
                 rover = rover.turn_left()
             elif command == 'R':
                 rover = rover.turn_right()
 
-        return rover, obstacle
+        return rover, None
