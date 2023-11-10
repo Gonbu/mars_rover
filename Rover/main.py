@@ -20,11 +20,8 @@ def main():
     receiver = CommandReceiverMissionControl()
     protocol = MyCommunicationProtocol(sender, receiver)
 
-    # Définition de l'adresse IP et du port du serveur auquel se connecter
-    server_address = ('127.0.0.1', 12345)
-
     # Initialiser le serveur dans le protocole
-    protocol.initialize_server(server_address)
+    protocol.initialize_server(rover_address)
 
     # Initialisation du rover
     rover = Rover(position_x_start, position_y_start, orientation_start)
@@ -38,6 +35,8 @@ def main():
 
             rover, obstacle = instructions.exec_commands(mars, rover)
 
+            #sender.send_command(protocol, rover, [obstacle["position"]["x"], obstacle["position"]["y"]])
+            
             if obstacle["is_obstacle"]:
                 sender.send_command(protocol, rover, [obstacle["position"]["x"], obstacle["position"]["y"]])
             else:

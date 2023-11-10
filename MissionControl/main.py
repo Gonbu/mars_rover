@@ -22,9 +22,9 @@ def initialize_server_address():
     while not valid_server_address_input:
         server_address_input = input('Voulez-vous utiliser le répéteur ? (O/N) : ').replace(" ", "")
         if server_address_input == "O":
-            return ('127.0.0.1', 12346)
+            return repeater_address
         elif server_address_input == "N":
-            return ('127.0.0.1', 12345)
+            return rover_address
 
 def main() :
     # Initialisation des objets de communication
@@ -58,8 +58,6 @@ def main() :
     finally :
         # Fermeture du socket client (Note : il manquait l'initialisation du socket client dans votre code)
         protocol.client_socket.close()
-
-
 
 if __name__ == "__main__":
     main()

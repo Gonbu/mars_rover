@@ -20,8 +20,6 @@ from Missions.marsMission import *
 
 def main() :
     # Définit l'adresse IP et le port du Rover auquel se connecter
-    rover_address = ('127.0.0.1', 12345)
-    server_address = ('127.0.0.1', 12346)
 
     sender_mission_control = CommandSenderMissionControl()
     receiver_mission_control = CommandReceiverMissionControl()
@@ -33,7 +31,7 @@ def main() :
     protocol_client = MyCommunicationProtocol(sender_rover, receiver_rover)
         
     # Initialise le serveur sur server_address
-    protocol_server.initialize_server(server_address)
+    protocol_server.initialize_server(repeater_address)
     # Établir la connexion avec le Rover
     protocol_client.establish_connection(rover_address)
     
