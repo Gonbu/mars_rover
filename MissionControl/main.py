@@ -12,8 +12,8 @@ from Domain.Exploration.planet import Planet
 from Domain.MissionRover.command import Command
 from Domain.Communication.CommunicationAbstraction import CommandSender, CommandReceiver
 from SocketCommunication.ProtocolCommunication import MyCommunicationProtocol
-from SocketCommunication.CommandReceiverRover import CommandReceiverRover
-from SocketCommunication.CommandSenderRover import CommandSenderRover
+from SocketCommunication.ReceiverFromRover import ReceiverFromRover
+from SocketCommunication.SenderToRover import SenderToRover
 from Missions.marsMission import *
 
 def initialize_server_address():
@@ -28,8 +28,8 @@ def initialize_server_address():
 
 def main() :
     # Initialisation des objets de communication
-    sender = CommandSenderRover()
-    receiver = CommandReceiverRover()
+    sender = SenderToRover()
+    receiver = ReceiverFromRover()
     protocol = MyCommunicationProtocol(sender, receiver)
 
     # Établissement de la connexion avec le serveur

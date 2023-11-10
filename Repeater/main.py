@@ -12,20 +12,20 @@ from Domain.MissionRover.rover import Rover
 from Domain.MissionRover.command import Command
 from Domain.Communication.CommunicationAbstraction import CommandSender, CommandReceiver
 from SocketCommunication.ProtocolCommunication import MyCommunicationProtocol
-from SocketCommunication.CommandReceiverRover import CommandReceiverRover
-from SocketCommunication.CommandSenderRover import CommandSenderRover
-from SocketCommunication.CommandReceiverMissionControl import CommandReceiverMissionControl
-from SocketCommunication.CommandSenderMissionControl import CommandSenderMissionControl
+from SocketCommunication.ReceiverFromRover import ReceiverFromRover
+from SocketCommunication.SenderToRover import SenderToRover
+from SocketCommunication.ReceiverFromMissionControl import ReceiverFromMissionControl
+from SocketCommunication.SenderToMissionControl import SenderToMissionControl
 from Missions.marsMission import *
 
 def main() :
     # Définit l'adresse IP et le port du Rover auquel se connecter
 
-    sender_mission_control = CommandSenderMissionControl()
-    receiver_mission_control = CommandReceiverMissionControl()
+    sender_mission_control = SenderToMissionControl()
+    receiver_mission_control = ReceiverFromMissionControl()
 
-    sender_rover = CommandSenderRover()
-    receiver_rover = CommandReceiverRover()
+    sender_rover = SenderToRover()
+    receiver_rover = ReceiverFromRover()
 
     protocol_server = MyCommunicationProtocol(sender_mission_control, receiver_mission_control)
     protocol_client = MyCommunicationProtocol(sender_rover, receiver_rover)
