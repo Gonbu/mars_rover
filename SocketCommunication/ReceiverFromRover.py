@@ -1,7 +1,7 @@
 from Domain.Communication.CommunicationAbstraction import CommandReceiver
 
 # Classe qui reçoit les données envoyées par Rover
-class CommandReceiverRover(CommandReceiver):
+class ReceiverFromRover(CommandReceiver):
     def receive_command(self, protocol, rover):
         data = protocol.receive_data_with_length(protocol)
 
