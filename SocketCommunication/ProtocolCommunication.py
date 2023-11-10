@@ -27,11 +27,6 @@ class MyCommunicationProtocol(CommandSender, CommandReceiver) :
     def receive_command(self, socket):
         # Implémentez la logique de réception de la commande ici
         pass
-
-    def send_and_receive(self, command):
-        self.sender.send_command(self.client_socket, command)
-        response = self.receiver.receive_command(self.client_socket)
-        return response
     
     def encode(self, *values):
         data_to_send = ",".join(map(str, values))

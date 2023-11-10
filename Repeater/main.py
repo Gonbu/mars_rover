@@ -9,7 +9,7 @@ root_dir = os.path.abspath(os.path.join(current_dir, '..'))
 sys.path.append(root_dir)
 
 from Domain.MissionRover.rover import Rover
-from Domain.MissionRover.instruction import Instruction
+from Domain.MissionRover.command import Command
 from Domain.Communication.CommunicationAbstraction import CommandSender, CommandReceiver
 from SocketCommunication.ProtocolCommunication import MyCommunicationProtocol
 from SocketCommunication.CommandReceiverRover import CommandReceiverRover
@@ -41,13 +41,13 @@ def main() :
     try :
         # Le Repeater agit en tant que relais entre MissionControl et Rover
         while True:
-            # Collecte des instructions
-            instructions = receiver_mission_control.receive_command(protocol_server)
-            if not instructions:
+            # Collecte des commands
+            commands = receiver_mission_control.receive_command(protocol_server)
+            if not commands:
                 break  # Fin de la communication
 
-            # Réexpédier les instructions à Rover
-            sender_rover.send_command(protocol_client, instructions._Instruction__instruction_order)
+            # Réexpédier les commands à Rover
+            sender_rover.send_command(protocol_client, commands._Command__command_order)
 
             # Recevoir les données de Rover
             rover, coords = receiver_rover.receive_command(protocol_client, rover)

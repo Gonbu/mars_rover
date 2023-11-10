@@ -9,7 +9,7 @@ sys.path.append(root_dir)
 
 from Domain.MissionRover.rover import Rover
 from Domain.Exploration.planet import Planet
-from Domain.MissionRover.instruction import Instruction
+from Domain.MissionRover.command import Command
 from Domain.Communication.CommunicationAbstraction import CommandSender, CommandReceiver
 from SocketCommunication.ProtocolCommunication import MyCommunicationProtocol
 from SocketCommunication.CommandReceiverRover import CommandReceiverRover
@@ -41,12 +41,12 @@ def main() :
 
     try :
         while True:
-            # Collecte des instructions
-            instructions = Instruction()
-            instructions.add_instruction()
+            # Collecte des commands
+            commands = Command()
+            commands.add_command()
 
             # Envoi des commandes au rover
-            sender.send_command(protocol, instructions._Instruction__instruction_order)
+            sender.send_command(protocol, commands._Command__command_order)
 
             # Réception de l'état mis à jour du rover
             rover, obstacle = receiver.receive_command(protocol, rover)

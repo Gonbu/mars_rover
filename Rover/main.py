@@ -1,13 +1,12 @@
 import socket
 import sys
 import os
-from dis import Instruction
 current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.abspath(os.path.join(current_dir, '..'))
 sys.path.append(root_dir)
 
 from Domain.MissionRover.rover import Rover
-from Domain.MissionRover.instruction import Instruction
+from Domain.MissionRover.command import Command
 from SocketCommunication.ProtocolCommunication import MyCommunicationProtocol
 # from Domain.Communication.CommunicationAbstraction import CommandReceiver, CommandSender
 from SocketCommunication.CommandReceiverMissionControl import CommandReceiverMissionControl
@@ -29,14 +28,12 @@ def main():
     try:
         # Attendez les données du client et renvoyez-les
         while True:
-            instructions = receiver.receive_command(protocol)
-            if not instructions:
+            commands = receiver.receive_command(protocol)
+            if not commands:
                 break  # Fin de la communication
 
-            rover, obstacle = instructions.exec_commands(mars, rover)
+            rover, obstacle = commands.exec_commands(mars, rover)
 
-            #sender.send_command(protocol, rover, [obstacle["position"]["x"], obstacle["position"]["y"]])
-            
             if obstacle["is_obstacle"]:
                 sender.send_command(protocol, rover, [obstacle["position"]["x"], obstacle["position"]["y"]])
             else:
