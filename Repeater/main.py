@@ -14,12 +14,12 @@ from Communication.CommunicationAbstraction import CommandSender, CommandReceive
 from Communication.ProtocolCommunication import MyCommunicationProtocol
 
 class MyCommandSenderMissionControl(CommandSender):
-    def send_command(self, rover, coords, protocol):
+    def send_command(self, protocol, rover, coords):
         data_to_send = protocol.encode(rover, *coords)
         protocol.client_socket.sendall(data_to_send)
 
 class MyCommandSenderRover(CommandSender):
-    def send_command(self, instructions, protocol):
+    def send_command(self, protocol, instructions):
         data_to_send = protocol.encode(instructions)
         protocol.client_socket.sendall(data_to_send)
 
@@ -63,40 +63,45 @@ class MyCommandReceiverRover(CommandReceiver):
         rover.from_repr(rover_str)
         return rover, coords
 
-# Définit l'adresse IP et le port du Rover auquel se connecter
-rover_address = ('127.0.0.1', 12345)
-server_address = ('127.0.0.1', 12346)
+def main() :
+    # Définit l'adresse IP et le port du Rover auquel se connecter
+    rover_address = ('127.0.0.1', 12345)
+    server_address = ('127.0.0.1', 12346)
 
-sender_mission_control = MyCommandSenderMissionControl()
-receiver_mission_control = MyCommandReceiverMissionControl()
+    sender_mission_control = MyCommandSenderMissionControl()
+    receiver_mission_control = MyCommandReceiverMissionControl()
 
-sender_rover = MyCommandSenderRover()
-receiver_rover = MyCommandReceiverRover()
+    sender_rover = MyCommandSenderRover()
+    receiver_rover = MyCommandReceiverRover()
 
-protocol_server = MyCommunicationProtocol(sender_mission_control, receiver_mission_control)
-protocol_client = MyCommunicationProtocol(sender_rover, receiver_rover)
-    
-# Initialise le serveur sur server_address
-protocol_server.initialize_server(server_address)
-# Établir la connexion avec le Rover
-protocol_client.establish_connection(rover_address)
+    protocol_server = MyCommunicationProtocol(sender_mission_control, receiver_mission_control)
+    protocol_client = MyCommunicationProtocol(sender_rover, receiver_rover)
+        
+    # Initialise le serveur sur server_address
+    protocol_server.initialize_server(server_address)
+    # Établir la connexion avec le Rover
+    protocol_client.establish_connection(rover_address)
 
-# Le Repeater agit en tant que relais entre MissionControl et Rover
-while True:
-    data = receiver_mission_control.receive_command(protocol_server)
-    print(data)
-    if not data:
-        break  # Fin de la communication
+    try :
+        # Le Repeater agit en tant que relais entre MissionControl et Rover
+        while True:
+            instructions = receiver_mission_control.receive_command(protocol_server)
+            if not instructions:
+                break  # Fin de la communication
 
-    # Réexpédier les données à Rover
-    sender_rover.send_command(data, protocol_client)
+            # Réexpédier les données à Rover
+            sender_rover.send_command(protocol_client, instructions._Instruction__instruction_order)
 
-    # Recevoir les données de Rover
-    received_data = receiver_rover.receive_command(protocol_client)
+            # Recevoir les données de Rover
+            rover, coords = receiver_rover.receive_command(protocol_client)
 
-    # Réexpédier les données à MissionControl
-    sender_mission_control.send_command(received_data, protocol_server)
+            # Réexpédier les données à MissionControl
+            sender_mission_control.send_command(protocol_server, rover, coords)
 
-# Ferme les sockets
-protocol_server.close_connection()
-protocol_client.close_connection()
+    finally :
+        # Ferme les sockets
+        protocol_server.close_connection()
+        protocol_client.close_connection()
+
+if __name__ == "__main__":
+    main()
