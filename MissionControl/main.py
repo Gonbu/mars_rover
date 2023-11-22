@@ -3,10 +3,12 @@ import pickle
 import threading
 import sys
 import os
+
 current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.abspath(os.path.join(current_dir, '..'))
 sys.path.append(root_dir)
 
+from MissionControl.missionControlRunner import MissionControlRunner
 from Domain.MissionRover.rover import Rover
 from Domain.Exploration.planet import Planet
 from Domain.MissionRover.command import Command
@@ -39,25 +41,11 @@ def main() :
     # Initialisation du rover
     rover = Rover(position_x_start, position_y_start, orientation_start)
 
-    try :
-        while True:
-            # Collecte des commands
-            commands = Command()
-            commands.add_command()
+    # Création de l'instance MissionControlRunner
+    mission_control_runner = MissionControlRunner(sender, receiver, protocol, rover, server_address)
 
-            # Envoi des commandes au rover
-            sender.send_command(protocol, commands._Command__command_order)
-
-            # Réception de l'état mis à jour du rover
-            rover, obstacle = receiver.receive_command(protocol, rover)
-
-            # Traitement des données reçues du rover
-            rover.to_string()
-            if len(obstacle) > 0:
-                print("Obstacle : {}".format(obstacle))
-    finally :
-        # Fermeture du socket client (Note : il manquait l'initialisation du socket client dans votre code)
-        protocol.client_socket.close()
+    # Exécutez la logique du mission control
+    mission_control_runner.run_from_mission_control()
 
 if __name__ == "__main__":
     main()
