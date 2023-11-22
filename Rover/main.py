@@ -1,10 +1,12 @@
 import socket
 import sys
 import os
+
 current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.abspath(os.path.join(current_dir, '..'))
 sys.path.append(root_dir)
 
+from Domain.MissionRover.roverOverNetwork import RoverOverNetwork
 from Domain.MissionRover.rover import Rover
 from Domain.MissionRover.command import Command
 from SocketCommunication.ProtocolCommunication import MyCommunicationProtocol
@@ -23,9 +25,15 @@ def main():
     protocol.initialize_server(rover_address)
 
     # Initialisation du rover
-    rover = Rover(position_x_start, position_y_start, orientation_start)
+    rover_at_start = Rover(position_x_start, position_y_start, orientation_start)
 
-    try:
+    # Création de l'instance RoverOverNetwork
+    rover_over_network = RoverOverNetwork(rover_at_start, protocol, sender, receiver, mars)
+
+    # Exécutez la logique du rover sur le réseau
+    rover_over_network.run_from_rover()
+
+    """ try:
         # Attendez les données du client et renvoyez-les
         while True:
             commands = receiver.receive_command(protocol)
@@ -37,7 +45,7 @@ def main():
             sender.send_command(protocol, rover, obstacle)
     finally:
         # Fermez les sockets
-        protocol.close_connection()
+        protocol.close_connection() """
 
 if __name__ == "__main__":
     main()
