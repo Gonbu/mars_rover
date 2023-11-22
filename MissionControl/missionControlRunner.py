@@ -15,7 +15,7 @@ class MissionControlRunner:
         self.rover = rover
         self.server_address = server_address
 
-    def run_from_mission_control(self):
+    def run(self):
         try:
             while True:
                 # Collecte des commands

@@ -45,7 +45,7 @@ def main() :
     mission_control_runner = MissionControlRunner(sender, receiver, protocol, rover, server_address)
 
     # Exécutez la logique du mission control
-    mission_control_runner.run_from_mission_control()
+    mission_control_runner.run()
 
 if __name__ == "__main__":
     main()
