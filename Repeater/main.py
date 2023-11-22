@@ -43,7 +43,7 @@ def main() :
     repeater_runner = RepeaterRunner(sender_mission_control, receiver_mission_control, sender_rover, receiver_rover, protocol_server, protocol_client, rover)
 
     # Exécutez la logique du Repeater
-    repeater_runner.run_relay()
+    repeater_runner.run()
 
 if __name__ == "__main__":
     main()

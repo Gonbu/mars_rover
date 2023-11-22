@@ -10,7 +10,7 @@ class RepeaterRunner:
         self.protocol_client = protocol_client
         self.rover = rover
 
-    def run_relay(self):
+    def run(self):
         try:
             # Le Repeater agit en tant que relais entre MissionControl et Rover
             while True:
