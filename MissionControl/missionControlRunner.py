@@ -23,7 +23,7 @@ class MissionControlRunner:
                 self.sender.send_command(self.protocol, commands._Command__command_order)
                 self.rover, obstacle = self.receiver.receive_command(self.protocol, self.rover)
 
-                self.rover.to_string()
+                self.rover.display_state()
                 if len(obstacle) > 0:
                     print("Obstacle : {}".format(obstacle))
         finally:
