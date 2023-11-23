@@ -23,7 +23,7 @@ class Command:
         
 
     def exec_commands(self, planet, rover):
-        if not self.is__valid:
+        if not self.__is_valid:
             return rover, None
         for command in self.__command_order:
             actual_rover = rover
