@@ -1,5 +1,3 @@
-# CommunicationAbstraction.py
-
 from abc import ABC, abstractmethod
 
 class CommandSender(ABC):

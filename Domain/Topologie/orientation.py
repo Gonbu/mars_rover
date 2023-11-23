@@ -1,6 +1,5 @@
 from Domain.Topologie.position import Position
 
-#O-V
 class Orientation:
     def __init__(self, orientation):
         self.__orientation = orientation
@@ -17,6 +16,9 @@ class Orientation:
             'S': {'L': 'E', 'R': 'W'},
             'W': {'L': 'S', 'R': 'N'}
         }
+
+    def __str__(self) :
+        return f"{self.__orientation}"
 
     def update_position(self, direction, position, planet):
         direction_x, direction_y = self.get_direction_x_y(direction)
@@ -50,3 +52,4 @@ class Orientation:
             return Orientation(rotations[self.__orientation][rotation])
         else:
             raise ValueError("Invalid rotation")
+
