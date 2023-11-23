@@ -18,15 +18,6 @@ from SocketCommunication.ReceiverFromRover import ReceiverFromRover
 from SocketCommunication.SenderToRover import SenderToRover
 from Missions.marsMission import *
 
-def initialize_server_address():
-    # Définition de l'adresse IP et du port du serveur auquel se connecter
-    valid_server_address_input = False
-    while not valid_server_address_input:
-        server_address_input = input('Voulez-vous utiliser le répéteur ? (O/N) : ').replace(" ", "")
-        if server_address_input == "O":
-            return repeater_address
-        elif server_address_input == "N":
-            return rover_address
 
 def main() :
     # Initialisation des objets de communication
@@ -34,15 +25,13 @@ def main() :
     receiver = ReceiverFromRover()
     protocol = MyCommunicationProtocol(sender, receiver)
 
-    # Établissement de la connexion avec le serveur
-    server_address = initialize_server_address()
-    protocol.establish_connection(server_address)
+    protocol.establish_connection(mission_control_connection_address)
 
     # Initialisation du rover
     rover = Rover(position_x_start, position_y_start, orientation_start)
 
     # Création de l'instance MissionControlRunner
-    mission_control_runner = MissionControlRunner(sender, receiver, protocol, rover, server_address)
+    mission_control_runner = MissionControlRunner(sender, receiver, protocol, rover, mission_control_connection_address)
 
     # Exécutez la logique du mission control
     mission_control_runner.run()
