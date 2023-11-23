@@ -1,6 +1,6 @@
 import socket
 import pickle
-from Communication.CommunicationAbstraction import CommandSender, CommandReceiver
+from Domain.Communication.CommunicationAbstraction import CommandSender, CommandReceiver
 
 class MyCommunicationProtocol(CommandSender, CommandReceiver) :
     def __init__(self, sender, receiver):
@@ -21,23 +21,29 @@ class MyCommunicationProtocol(CommandSender, CommandReceiver) :
         self.client_socket.connect(server_address)
 
     def send_command(self, socket, command):
-        # Implémentez la logique d'envoi de la commande ici
         pass
 
     def receive_command(self, socket):
-        # Implémentez la logique de réception de la commande ici
         pass
-
-    def send_and_receive(self, command):
-        self.sender.send_command(self.client_socket, command)
-        response = self.receiver.receive_command(self.client_socket)
-        return response
     
     def encode(self, *values):
         data_to_send = ",".join(map(str, values))
         data_length = len(data_to_send).to_bytes(4, byteorder='big')
         data_to_send = data_length + data_to_send.encode('utf-8')
         return data_to_send
+    
+    def receive_data_with_length(self, protocol) :
+        data_length_bytes = protocol.client_socket.recv(4)
+        data_length = int.from_bytes(data_length_bytes, byteorder='big')
+
+        data = b""
+        while len(data) < data_length:
+            chunk = protocol.client_socket.recv(data_length - len(data))
+            if not chunk:
+                raise Exception("Connexion interrompue avant la fin de la réception des données.")
+            data += chunk
+
+        return data
 
     def close_connection(self):
         self.client_socket.close()
