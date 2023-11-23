@@ -1,4 +1,7 @@
 # Entité
+import copy
+
+
 class Command:
     def __init__(self, commands = [], is_valid = False):
         self.__command_order = commands
@@ -33,8 +36,12 @@ class Command:
             if command == 'F':
                 rover = rover.move_forward(planet)
                 if actual_rover == rover :
+                    actual_position = copy.deepcopy(actual_rover._Rover__position)
                     direction_x, direction_y = rover._Rover__orientation.get_direction_x_y('F')
-                    obstacle_position = rover._Rover__orientation.position_after_movement(planet, rover._Rover__position, direction_x, direction_y)
+                    obstacle_position = rover._Rover__orientation.position_after_movement(planet, actual_position, direction_x, direction_y)
+
+                    print("rover position x", rover._Rover__position._Position__x._Coordinate__value)
+                    print("rover position y", rover._Rover__position._Position__y._Coordinate__value)
                     return rover, [obstacle_position._Position__x._Coordinate__value, obstacle_position._Position__y._Coordinate__value]
             elif command == 'B':
                 rover = rover.move_backward(planet)

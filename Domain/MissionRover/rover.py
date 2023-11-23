@@ -14,6 +14,10 @@ class Rover:
         initial_position = Position(self.__position._Position__x._Coordinate__value, self.__position._Position__y._Coordinate__value)
         position = self.__orientation.update_position('F', initial_position, planet)
         if position._Position__x._Coordinate__value == self.__position._Position__x._Coordinate__value and position._Position__y._Coordinate__value == self.__position._Position__y._Coordinate__value :
+            """ print("position x", position._Position__x._Coordinate__value)
+            print("self.__position x", self.__position._Position__x._Coordinate__value)
+            print("position y", position._Position__y._Coordinate__value)
+            print("self.__position y", self.__position._Position__y._Coordinate__value) """
             return self
         new_rover = Rover(position._Position__x._Coordinate__value, position._Position__y._Coordinate__value, self.__orientation._Orientation__orientation)
         new_rover.to_string()
