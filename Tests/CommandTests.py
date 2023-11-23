@@ -92,12 +92,46 @@ class CommandTests(TestCase):
         self.assertEqual(self.curiosity._Rover__orientation._Orientation__orientation, 'N')
         self.assertEqual(obstacles, [0, 5])
 
-    def testSendAndReceive(self):
-        # Send a command from the client to the server and receive the response
-        response = self.client.protocol.send_and_receive(self.client.protocol.client_socket, "test")
+    def testAddCommandsInvalidInput(self):
+        commands = command.Command()
 
-        # Check if the response is the same as the one sent
-        self.assertEqual(response, "test")
+        # Use mock to simulate user input
+        with mock.patch('builtins.input', return_value='invalid_input'):
+            commands.add_command()
+
+            self.assertEqual(commands._Command__command_order, [])
+            self.assertEqual(commands._Command__is_valid, False)
+
+    def testExecCommandsValid(self):
+        commands = command.Command(['F', 'F', 'L', 'B', 'R'], True)
+
+        self.curiosity, obstacles = commands.exec_commands(self.mars, self.curiosity)
+
+        self.assertEqual(self.curiosity._Rover__position._Position__x._Coordinate__value, 1)
+        self.assertEqual(self.curiosity._Rover__position._Position__y._Coordinate__value, 2)
+        self.assertEqual(self.curiosity._Rover__orientation._Orientation__orientation, 'N')
+        self.assertIsNone(obstacles)
+
+    def testExecCommandsInvalid(self):
+        commands = command.Command(['invalid_input'], False)
+
+        self.curiosity, obstacles = commands.exec_commands(self.mars, self.curiosity)
+
+        self.assertEqual(self.curiosity._Rover__position._Position__x._Coordinate__value, 0)
+        self.assertEqual(self.curiosity._Rover__position._Position__y._Coordinate__value, 0)
+        self.assertEqual(self.curiosity._Rover__orientation._Orientation__orientation, 'N')
+        self.assertIsNone(obstacles)
+
+    def testExecCommandsObstacle(self):
+        self.mars = planet.Planet(5, 5, [obstacle.Obstacle(None, position.Position(0, 5))])
+        commands = command.Command(['F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F'], True)
+
+        self.curiosity, obstacles = commands.exec_commands(self.mars, self.curiosity)
+
+        self.assertEqual(self.curiosity._Rover__position._Position__x._Coordinate__value, 0)
+        self.assertEqual(self.curiosity._Rover__position._Position__y._Coordinate__value, 4)
+        self.assertEqual(self.curiosity._Rover__orientation._Orientation__orientation, 'N')
+        self.assertEqual(obstacles, [0, 5])
 
     def tearDown(self):
         # Close the client connection
