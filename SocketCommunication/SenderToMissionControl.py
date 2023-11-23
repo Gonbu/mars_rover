@@ -1,6 +1,5 @@
 from Domain.Communication.CommunicationAbstraction import CommandSender
 
-# Classe qui envoie des données à MissionControl
 class SenderToMissionControl(CommandSender):
     def send_command(self, protocol, rover, obstacle):
         if not obstacle :

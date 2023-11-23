@@ -1,6 +1,4 @@
-# Entité
 import copy
-
 
 class Command:
     def __init__(self, commands = [], is_valid = False):

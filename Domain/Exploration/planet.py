@@ -3,7 +3,6 @@ from Domain.Exploration.obstacle import Obstacle
 from Domain.Exploration.planetInterface import PlanetInterface
 from Domain.Topologie.position import Position
 
-#Objet-valeur
 class Planet(PlanetInterface):
     def __init__(self, size_x, size_y, obstacles=None):
         self.__size_x = size_x

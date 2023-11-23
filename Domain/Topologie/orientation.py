@@ -1,6 +1,5 @@
 from Domain.Topologie.position import Position
 
-#O-V
 class Orientation:
     def __init__(self, orientation):
         self.__orientation = orientation

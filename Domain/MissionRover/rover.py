@@ -2,7 +2,6 @@ import copy
 from Domain.Topologie.position import Position
 from Domain.Topologie.orientation import Orientation
 
-#Object-Value
 class Rover:
     def __init__(self, x, y, orientation):
         self.__position = Position(x, y)
