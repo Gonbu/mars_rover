@@ -21,11 +21,9 @@ class MyCommunicationProtocol(CommandSender, CommandReceiver) :
         self.client_socket.connect(server_address)
 
     def send_command(self, socket, command):
-        # Implémentez la logique d'envoi de la commande ici
         pass
 
     def receive_command(self, socket):
-        # Implémentez la logique de réception de la commande ici
         pass
     
     def encode(self, *values):
@@ -35,11 +33,9 @@ class MyCommunicationProtocol(CommandSender, CommandReceiver) :
         return data_to_send
     
     def receive_data_with_length(self, protocol) :
-        # Réception de la longueur des données en tant que préfixe
         data_length_bytes = protocol.client_socket.recv(4)
         data_length = int.from_bytes(data_length_bytes, byteorder='big')
 
-        # Réception des données
         data = b""
         while len(data) < data_length:
             chunk = protocol.client_socket.recv(data_length - len(data))
