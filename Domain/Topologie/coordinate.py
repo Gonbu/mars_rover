@@ -11,3 +11,6 @@ class Coordinate:
     
     def __eq__(self, other_coordinate) :
         return self.__value == other_coordinate._Coordinate__value
+    
+    def __str__(self) :
+        return f"{self.__value}"

@@ -13,6 +13,6 @@ class Position:
         return self.__x == other_position._Position__x and self.__y == other_position._Position__y
 
     def __str__(self) :
-        print()
+        return f"{self.__x},{self.__y}"
 
     
