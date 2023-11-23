@@ -92,6 +92,13 @@ class CommandTests(TestCase):
         self.assertEqual(self.curiosity._Rover__orientation._Orientation__orientation, 'N')
         self.assertEqual(obstacles, [0, 5])
 
+    def testSendAndReceive(self):
+        # Send a command from the client to the server and receive the response
+        response = self.client.protocol.send_and_receive(self.client.protocol.client_socket, "test")
+
+        # Check if the response is the same as the one sent
+        self.assertEqual(response, "test")
+
     def tearDown(self):
         # Close the client connection
         self.client.protocol.close_connection()
