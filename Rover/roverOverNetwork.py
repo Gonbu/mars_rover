@@ -8,7 +8,7 @@ class RoverOverNetwork:
         self.receiver = receiver
         self.planet = planet
 
-    def run_from_rover(self):
+    def run(self):
         try:
             # Attendez les données du client et renvoyez-les
             while True:

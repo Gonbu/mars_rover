@@ -32,7 +32,7 @@ def main():
     rover_over_network = RoverOverNetwork(rover_at_start, protocol, sender, receiver, mars)
 
     # Exécutez la logique du rover sur le réseau
-    rover_over_network.run_from_rover()
+    rover_over_network.run()
 
 if __name__ == "__main__":
     main()
