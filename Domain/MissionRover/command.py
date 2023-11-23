@@ -39,9 +39,6 @@ class Command:
                     actual_position = copy.deepcopy(actual_rover._Rover__position)
                     direction_x, direction_y = rover._Rover__orientation.get_direction_x_y('F')
                     obstacle_position = rover._Rover__orientation.position_after_movement(planet, actual_position, direction_x, direction_y)
-
-                    print("rover position x", rover._Rover__position._Position__x._Coordinate__value)
-                    print("rover position y", rover._Rover__position._Position__y._Coordinate__value)
                     return rover, [obstacle_position._Position__x._Coordinate__value, obstacle_position._Position__y._Coordinate__value]
             elif command == 'B':
                 rover = rover.move_backward(planet)
