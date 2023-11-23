@@ -11,3 +11,5 @@ class Obstacle:
             )
         self.__position = position
     
+    def compare_obstacle_and_position(self, compared_position) :
+        return self.__position == compared_position
