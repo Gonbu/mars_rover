@@ -33,7 +33,8 @@ class CommandTests(unittest.TestCase):
         self.curiosity = rover.Rover(0, 0, 'N')
 
         # Start the server in a separate thread
-        self.server_thread = threading.Thread(target=self.server.protocol.initialize_server, args=(self.server_address,))
+        self.server_thread = threading.Thread(target=self.server.protocol.initialize_server,
+                                              args=(self.server_address,))
         self.server_thread.start()
 
         # Allow some time for the server to start before connecting the client
@@ -51,6 +52,13 @@ class CommandTests(unittest.TestCase):
 
         # Check if the command is the same as the one sent
         self.assertEqual(command, "test")
+
+    def testSendAndReceive(self):
+        # Send a command from the client to the server and receive the response
+        response = self.client.protocol.send_and_receive(self.client.protocol.client_socket, "test")
+
+        # Check if the response is the same as the one sent
+        self.assertEqual(response, "test")
 
     def tearDown(self):
         # Close the client connection
