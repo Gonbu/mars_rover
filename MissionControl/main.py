@@ -28,7 +28,8 @@ def main() :
     rover = Rover(position_x_start, position_y_start, orientation_start)
 
     mission_control_runner = MissionControlRunner(sender, receiver, protocol, rover, mission_control_connection_address)
-    mission_control_runner.run()
+    mission_control_runner.init_front()
+    #mission_control_runner.run()
 
 if __name__ == "__main__":
     main()
