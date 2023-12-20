@@ -9,9 +9,10 @@ class Command:
         self.__right = 'R'
         self.__is_valid = is_valid
 
-    def add_command(self):
+    def add_command(self, commands_string=None):
         self.__command_order = []
-        commands_string = input('Enter commands: ').replace(" ", "")
+        if not commands_string :
+            commands_string = input('Enter commands: ').replace(" ", "")
         commands = list(commands_string)
         self.__is_valid = all(element == self.__forward or element == self.__backward or element == self.__left or element == self.__right for element in commands)
         

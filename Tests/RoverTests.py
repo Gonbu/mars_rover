@@ -1,4 +1,11 @@
 import unittest
+import sys
+import os
+
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.abspath(os.path.join(current_dir, '..'))
+sys.path.append(root_dir)
 from Domain.MissionRover.rover import Rover
 from Domain.Exploration.planet import Planet
 from Domain.MissionRover.command import Command

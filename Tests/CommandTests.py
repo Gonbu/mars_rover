@@ -1,12 +1,18 @@
 from unittest import TestCase, mock, main
 import time
 import threading
-import Rover.main as r
-import MissionControl.main as mc
+import sys
+import os
+
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.abspath(os.path.join(current_dir, '..'))
+sys.path.append(root_dir)
 from Domain.Topologie import position
 from Domain.Exploration import planet, obstacle
 from Domain.MissionRover import rover, command
-
+import Rover.main as r
+import MissionControl.main as mc
 
 class TestServer:
     def __init__(self):
