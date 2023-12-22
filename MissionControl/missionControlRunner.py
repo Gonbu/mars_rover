@@ -1,11 +1,11 @@
 import sys
 import os
 
-from roverFront import RoverFront
 current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.abspath(os.path.join(current_dir, '..'))
 sys.path.append(root_dir)
 
+from MissionControl.roverFront import RoverFront
 from Domain.MissionRover.command import Command
 
 import tkinter as tk

@@ -4,7 +4,6 @@ import threading
 import sys
 import os
 
-
 current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.abspath(os.path.join(current_dir, '..'))
 sys.path.append(root_dir)
@@ -68,6 +67,7 @@ class CommandTests(TestCase):
             self.assertEqual(commands._Command__is_valid, False)
 
     def testExecCommandsValid(self):
+        self.mars = planet.Planet(5, 5, [])
         commands = command.Command(['F', 'F', 'L', 'B', 'R'], True)
 
         self.curiosity, obstacles = commands.exec_commands(self.mars, self.curiosity)
