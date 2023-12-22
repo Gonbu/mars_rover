@@ -7,7 +7,7 @@ class Rover:
         self.__position = Position(x, y)
         self.__orientation = Orientation(orientation)
 
-    def __repr__(self):
+    def __str__(self):
         return f"{self.__position},{self.__orientation}"
 
     def move_forward(self, planet):
@@ -18,7 +18,7 @@ class Rover:
         else :
             self.__position = position
         new_rover = copy.deepcopy(self)
-        self.to_string()
+        self.display_state()
         return new_rover
         
     def move_backward(self, planet):
@@ -29,22 +29,22 @@ class Rover:
         else :
             self.__position = position
         new_rover = copy.deepcopy(self)
-        new_rover.to_string()
+        new_rover.display_state()
         return new_rover
 
     def turn_left(self):
         self.__orientation = self.__orientation.update_orientation('L')
         new_rover = copy.deepcopy(self)
-        new_rover.to_string()
+        new_rover.display_state()
         return new_rover
         
     def turn_right(self):
         self.__orientation = self.__orientation.update_orientation('R')
         new_rover = copy.deepcopy(self)
-        new_rover.to_string()
+        new_rover.display_state()
         return new_rover
 
-    def to_string(self):
+    def display_state(self):
         print(
             f"Rover is at {self.__position} facing {self.__orientation}")
 
