@@ -1,5 +1,9 @@
 # Documentation d'utilisation de l'application Mars Rover
 
+## Schéma de l'Architecture
+
+![Schéma](Archi_logiciel-Rover.png)
+
 ## Lancement de l'application
 
 ### 1ère possibilité : Lancement sans Repeater
