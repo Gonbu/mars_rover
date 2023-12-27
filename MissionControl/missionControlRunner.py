@@ -28,20 +28,23 @@ class MissionControlRunner:
             commands.add_command()
         else :
             commands = Command(commandlist)
+        
+        
+        if commands.check_is_valid_input() :
 
-        self.sender.send_command(self.protocol, commands._Command__command_order)
-        self.rover, obstacle = self.receiver.receive_command(self.protocol, self.rover)
+            self.sender.send_command(self.protocol, commands._Command__command_order)
+            self.rover, obstacle = self.receiver.receive_command(self.protocol, self.rover)
 
-        self.rover.display_state()
-        if len(obstacle) > 0:
-            print("Obstacle : {}".format(obstacle))
-            x, y = obstacle
-            x = x * largeur_rover + largeur_rover // 2
-            y = largeur_carte - (largeur_carte%largeur_rover) - y * hauteur_rover - hauteur_rover // 2
-            self.carte.create_rectangle(x - largeur_rover // 2, y - hauteur_rover // 2, x + largeur_rover // 2, y + hauteur_rover // 2, fill="red")
+            self.rover.display_state()
+            if len(obstacle) > 0:
+                print("Obstacle : {}".format(obstacle))
+                x, y = obstacle
+                x = x * largeur_rover + largeur_rover // 2
+                y = largeur_carte - (largeur_carte%largeur_rover) - y * hauteur_rover - hauteur_rover // 2
+                self.carte.create_rectangle(x - largeur_rover // 2, y - hauteur_rover // 2, x + largeur_rover // 2, y + hauteur_rover // 2, fill="red")
 
-        if rover_front :
-            rover_front.updatePosition(self.rover)
+            if rover_front :
+                rover_front.updatePosition(self.rover)
 
     def init_front(self) :
                 

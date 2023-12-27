@@ -47,3 +47,6 @@ class Command:
                 rover = rover.turn_right()
 
         return rover, None
+
+    def check_is_valid_input(self) :
+        return all(element == self.__forward or element == self.__backward or element == self.__left or element == self.__right for element in self.__command_order)
