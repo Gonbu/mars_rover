@@ -1,29 +1,31 @@
-# Dimensions de la carte toroïdale
-largeur_carte = 500
-hauteur_carte = 500
+import sys
+import os
 
-# Dimensions du rover
-largeur_rover = 20
-hauteur_rover = 20
+current_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.abspath(os.path.join(current_dir, '..'))
+sys.path.append(root_dir)
 
-# Calcul de la taille des cellules de la grille en fonction des dimensions du rover
-cell_size = max(largeur_rover, hauteur_rover)
+from Missions.marsMission import *
+from Domain.MissionRover.rover import Rover
 
 # Classe pour représenter le rover
-class RoverFront:
+class RoverFront(Rover):
     def __init__(self, canvas, coord_label):
         self.canvas = canvas
         self.coord_label = coord_label
-        self.x = largeur_carte // 2
-        self.y = hauteur_carte // 2
+        self.x = position_x_start * largeur_rover + largeur_rover // 2
+        self.y = largeur_carte - (largeur_carte%largeur_rover) - position_y_start * hauteur_rover - hauteur_rover // 2
         self.direction = "N"
-        self.image = canvas.create_rectangle(self.x - 10, self.y - 10, self.x + 10, self.y + 10, fill="black")
+        self.image = canvas.create_rectangle(self.x - largeur_rover // 2, self.y - hauteur_rover // 2, self.x + largeur_rover // 2, self.y + hauteur_rover // 2, fill="black")
         self.arrow = None  # Variable pour stocker la flèche
         self.mettre_a_jour_fleche()  # Appeler la méthode pour créer la flèche
 
-    def updatePosition(self, new_x, new_y):
-        self.x, self.y = new_x, new_y
-        self.canvas.coords(self.image, self.x - 10, self.y - 10, self.x + 10, self.y + 10)
+    def updatePosition(self, rover):
+        new_coords = str(rover._Rover__position).split(",")
+        self.x = int(new_coords[0]) * largeur_rover + largeur_rover // 2
+        self.y = largeur_carte - (largeur_carte%largeur_rover) - int(new_coords[1]) * hauteur_rover - hauteur_rover // 2
+        self.canvas.coords(self.image, self.x - largeur_rover // 2, self.y - hauteur_rover // 2, self.x + largeur_rover // 2, self.y + hauteur_rover // 2)
+        self.direction = (str(rover._Rover__orientation))
         self.mettre_a_jour_fleche()
 
     def mettre_a_jour_fleche(self):
